@@ -1,7 +1,29 @@
 var client = require('cheerio-httpcli');
+var language = require('@google-cloud/language');
 function chatBotFunction(chat,res){
 	var responseData;
-	if(chat.match(/검색/)){
+	const client = new language.LanguageServiceClient();
+	const document = {
+		content: chat,
+		type:'PLAIN_TEXT',
+	};
+		// Detects syntax in the document
+		client
+		  .analyzeSyntax({document: document})
+		  .then(results => {
+			const syntax = results[0];
+
+			console.log('Tokens:');
+			syntax.tokens.forEach(part => {
+			  console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
+			  console.log(`Morphology:`, part.partOfSpeech);
+			});
+		  })
+		  .catch(err => {
+			console.error('ERROR:', err);
+		  });
+	
+		if(chat.match(/검색/)){
 		var i = chat.indexOf("검색",0);
 		var word = chat.substring(0,i);
 		if(word.length<1){

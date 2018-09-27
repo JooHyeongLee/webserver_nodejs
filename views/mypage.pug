@@ -65,6 +65,7 @@ style.
               input#confirm.form-control(type='password', name='confirm', placeholder='Confirm your Password')
         .form-group
           button.btn.btn-primary.btn-lg.btn-block.login-button(type='button' onclick='modify()') 수정하기
+          button.btn.btn-primary.btn-lg.btn-block.login-button(type='button' onclick='withdrawal()') 회원탈퇴
 script.
  $(document) .ready(function(){
   $('#navbar').load('http://localhost:3000/header') 
@@ -102,6 +103,20 @@ script.
   location.href='/form';
  }
  });
+ }
+ function withdrawal(){
+ var data = {'id':info.mIdx}
+ data = JSON.stringify(data)
+ var xhr = new XMLHttpRequest();
+ xhr.open('POST','http://localhost:3000/withdraw_receive',true);
+ xhr.setRequestHeader('Content-type','application/json');
+ xhr.send(data)
+ xhr.addEventListener('load',function(){
+ var result = JSON.parse(xhr.responseText);
+ if(result.result =='ok')
+  alert('탈퇴 완료')
+  document.location.href="http://localhost:3000/index"
+ })
  }
 script(type='text/javascript', src='assets/js/bootstrap.js')
 

@@ -1,7 +1,6 @@
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var cp = require('child_process');
-var n = cp.fork(`${__dirname}/sub.js`);
 var exec = require('child_process').exec;
 var models = require('../models');
 var async = require('async');
@@ -74,7 +73,8 @@ function compileFunction(lan,path,source,res){
 	//DB저장
 	models.Code.create({
 		title: 'test',
-		code: source
+		code: source,
+		fk_userId: member.mIdx
 	}).catch(function(err) {
 		console.error(err);
 	});

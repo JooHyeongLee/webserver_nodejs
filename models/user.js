@@ -1,4 +1,4 @@
-var models = require('../models')
+var models = require('../models');
 module.exports = function (sequelize, DataTypes) {
   const user = sequelize.define('User', {
 	  name: {
@@ -37,5 +37,11 @@ module.exports = function (sequelize, DataTypes) {
     // define the table's name
     tableName: 'user'
 	});
-  return user;
+	user.associate = function(models) {
+		models.User.hasMany(models.Code, {
+			foreignKey: 'fk_userId',
+			onDelete: 'cascade'
+		});
+	};
+	return user;
 };

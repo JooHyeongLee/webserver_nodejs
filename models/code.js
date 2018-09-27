@@ -1,4 +1,3 @@
-var models = require('../models')
 module.exports = function (sequelize, DataTypes) {
   const code = sequelize.define('Code', {
 	  title: {
@@ -10,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
 		  field: 'code', 
 		  type: DataTypes.STRING(100), 
 		  allowNull: false 
-	  }
+	  },
   }, {
     // don't use camelcase for automatically added attributes but underscore style
     // so updatedAt will be updated_at

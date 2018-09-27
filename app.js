@@ -5,8 +5,10 @@ var app = express();
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var bodyParser = require('body-parser');
-var request = require('request');
-var client = require('cheerio-httpcli');
+//var request = require('request');
+//var client = require('cheerio-httpcli');
+var language = require('@google-cloud/language');
+
 //templete engine and path
 app.set('view engine','pug');
 app.set('views','./views');
@@ -26,6 +28,8 @@ var login = require('./function/login');
 var validation = require('./function/enrollValidation');
 //modify info function
 var modifyInfo = require('./function/modifyInfo');
+//withdraw function
+var withDraw = require('./function/withDraw');
 // connect To DB
 var models = require('./models');
 models.sequelize.sync()
@@ -62,6 +66,9 @@ app.post('/enroll_receive',function(req,res){
 	console.log(req.body);
 	var info = req.body;
 	validation.enrollValidation(info,res);
+});
+app.post('/withdraw_receive',function(req,res){
+	withDraw.withDrawFunction(req.body.id,res);
 });
 app.post('/modifyInfo_receive',function(req,res){
 	var info = req.body;

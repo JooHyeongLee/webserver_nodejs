@@ -16,6 +16,7 @@ function loginFunction(id,pwd,res){
 			} 
 			else{
 				//로그인 성공시 Singleton 객체에 id,pwd값 setting
+				member.mIdx = user.dataValues.id;
 				member.mIsLogin = true;	
 				member.mId = id;
 				member.mPwd = pwd;
