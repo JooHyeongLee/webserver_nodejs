@@ -1,4 +1,5 @@
 var models = require('../models');
+var sha256 = require('sha256');
 function enrollValidation(info,res){
 	var responseData;
 	//공백 체크
@@ -33,7 +34,7 @@ function enrollValidation(info,res){
 				name: info.name,
 				nick: info.nick,
 				user_id: info.email,
-				password: info.password
+				password: sha256(info.password)
 			}).catch(function(err){
 				console.error(err);
 			});

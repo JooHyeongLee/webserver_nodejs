@@ -1,4 +1,5 @@
 var models = require('../models');
+var sha256 = require('sha256');
 function modifyInfoFunction(info,res){
 	var responseData;
 	//공백 체크
@@ -17,7 +18,7 @@ function modifyInfoFunction(info,res){
 		return;
 	}
 	models.User.update(
-		{name: info.name, nick: info.nickname, password: info.password},
+		{name: info.name, nick: info.nickname, password: sha256(info.password)},
 		{where: {user_id: info.email} }
 	);
 	responseData = {'result':'ok'};

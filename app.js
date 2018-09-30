@@ -30,6 +30,8 @@ var validation = require('./function/enrollValidation');
 var modifyInfo = require('./function/modifyInfo');
 //withdraw function
 var withDraw = require('./function/withDraw');
+//sha 256 비밀번호 암호화
+var sha256 = require('sha256');
 // connect To DB
 var models = require('./models');
 models.sequelize.sync()
@@ -75,7 +77,7 @@ app.post('/modifyInfo_receive',function(req,res){
 	modifyInfo.modifyInfoFunction(info,res);
 });
 app.get('/logout',function(req,res){
-	member.mId=null; member.mPwd = null; member.mName = null; member.mNick = null;
+	member.mId=null; member.mName = null; member.mNick = null;
 	member.mIsLogin = false;
 	res.render('index');
 });
@@ -84,7 +86,7 @@ app.post('/login_receive',function(req,res){
 	var pwd = req.body.login_password;
 	var responseData;
 	//로그인 메소드 호출
-	login.loginFunction(id,pwd,res);
+	login.loginFunction(id,sha256(pwd),res);
 });
 app.post('/practice_receive',function(req,res) {
 	//var title = req.body.title;

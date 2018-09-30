@@ -74,8 +74,6 @@ script.
  document.getElementById('email').value=info.mId;
  document.getElementById('name').value=info.mName;
  document.getElementById('nickname').value=info.mNick;
- document.getElementById('password').value=info.mPwd;
- document.getElementById('confirm').value=info.mPwd;
  function modify(){
  var name = document.getElementById('name').value;
  var email = document.getElementById('email').value;
@@ -100,7 +98,7 @@ script.
  }
  else{
   alert('수정 완료');
-  location.href='/form';
+  location.href='/index';
  }
  });
  }

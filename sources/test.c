@@ -1,6 +1,6 @@
 #include<stdio.h>
 int main()
 {
-	printf("ad1");
+sdfa
 	return 0;
 }

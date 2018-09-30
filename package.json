@@ -27,6 +27,7 @@
     "request": "^2.87.0",
     "response": "^0.18.0",
     "sequelize": "^4.37.1",
+    "sha256": "^0.2.0",
     "shelljs": "^0.8.1",
     "underscore": "^1.8.3",
     "utf8": "^3.0.0",
