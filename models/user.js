@@ -42,6 +42,15 @@ module.exports = function (sequelize, DataTypes) {
 			foreignKey: 'fk_userId',
 			onDelete: 'cascade'
 		});
+		models.User.hasMany(models.Board,{
+			foreignKey: 'fk_userId',
+			onDelete: 'cascade'
+		});
+		//		models.Board.belongsTo(models.User,{
+		//			targetKey: 'name',
+		//			foreignKey: 'fk_name',
+		//			constraints: false,
+		//		})
 	};
 	return user;
 };

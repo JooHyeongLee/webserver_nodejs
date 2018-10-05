@@ -1,0 +1,47 @@
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+link#custom-css(href='custom_css/commuity.css', rel='stylesheet')
+// Bootstrap core CSS
+link(rel='stylesheet', href='css/bootstrap.css')
+link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
+#navbar
+table.type09(id='List')
+	thead
+	tr
+		th(scope='cols') 작 성 자 
+		th(scope='cols') 제 목
+	tbody#tbody
+
+p
+p(align="right")
+	button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
+div(align="right" style="margin-right:10%;")
+	section
+		select(name='option' style='margin-bottom:4%;')
+			option(value="") 선택
+			option(value="작성자") 작성자
+			option(value="제목+내용") 제목+내용
+		input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
+		button#search(type='button' onclick='searchFunction()') 검색 
+script.
+	var data = !{data}
+	if(data==0)
+		var len = 1
+	else{
+		var len = Object.keys(data).length
+		var tbody = document.getElementById('tbody');
+		for(var i=0;i<len;i++){
+			tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th>"+data[i].title+"</th>"
+		}
+	}
+	$(document).ready(function(){
+		$('#navbar').load('http://localhost:3000/header')
+	});
+	function writeFunction(){
+		location.replace('http://localhost:3000/write')
+	}
+	function searchFunction(){
+		
+	}
+
+
+	

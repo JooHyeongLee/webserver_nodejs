@@ -24,6 +24,8 @@ var comp = require('./function/compiler');
 var chatbot = require('./function/chatBot');
 //login function
 var login = require('./function/login');
+//게시판
+var board = require('./function/notice');
 //enroll Validation function
 var validation = require('./function/enrollValidation');
 //modify info function
@@ -76,6 +78,30 @@ app.post('/modifyInfo_receive',function(req,res){
 	var info = req.body;
 	modifyInfo.modifyInfoFunction(info,res);
 });
+app.get('/commuity',function(req,res){
+	board.noticeFunction(function(result){
+		var jsonStr = JSON.stringify(result);
+		if(result.length==0)
+			res.render('commuity',{data:0})
+		else
+			res.render('commuity',{data:jsonStr})
+	})
+});
+app.get('/write',function(req,res){
+	res.render('write');
+});
+app.post('/write_receive',function(req,res){
+	var responseData = {'result':'ok'}
+	models.Board.create({
+		title:req.body.title,
+		content:req.body.content,
+		fk_userId: member.mIdx,
+	}).then(function(){
+		res.json(responseData)
+	}).catch(function(err){
+		console.log(err)
+	})
+})
 app.get('/logout',function(req,res){
 	member.mId=null; member.mName = null; member.mNick = null;
 	member.mIsLogin = false;
