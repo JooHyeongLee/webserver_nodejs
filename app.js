@@ -3,37 +3,43 @@ var sequelize = require('sequelize');
 var parse = require('parse-json');
 var app = express();
 var fs = require('fs');
-var PDK = require('node-pinterest');
-var pinterestAPI = require('pinterest-api');
 var spawn = require('child_process').spawn;
 var bodyParser = require('body-parser');
-var request = require('request');
-var client = require('cheerio-httpcli');
+//var request = require('request');
+//var client = require('cheerio-httpcli');
+var language = require('@google-cloud/language');
+
 //templete engine and path
 app.set('view engine','pug');
 app.set('views','./views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-//bootstrap
-app.use(express.static(__dirname + '/public'));
+//public directory path setting
+app.use(express.static(__dirname));
 //singleton
-var member = require('./singleton');
+var member = require('./function/singleton');
 //comfile function
-var comp = require('./compiler');
+var comp = require('./function/compiler');
 //chatbot function
-var chatbot = require('./chatBot');
+var chatbot = require('./function/chatBot');
 //login function
-var login = require('./login');
+var login = require('./function/login');
+//게시판
+var board = require('./function/notice');
 //enroll Validation function
-var validation = require('./enrollValidation');
+var validation = require('./function/enrollValidation');
 //modify info function
-var modifyInfo = require('./modifyInfo');
+var modifyInfo = require('./function/modifyInfo');
+//withdraw function
+var withDraw = require('./function/withDraw');
+//sha 256 비밀번호 암호화
+var sha256 = require('sha256');
 // connect To DB
 var models = require('./models');
 models.sequelize.sync()
-  .then(function() {
+	.then(function() {
 	console.log('✓ DB connection success.');
-    console.log('  Press CTRL-C to stop\n');
+	  console.log('  Press CTRL-C to stop\n');
   })
   .catch(function(err) {
     console.error(err);
@@ -41,14 +47,6 @@ models.sequelize.sync()
     process.exit();
   });
 
-app.get('/image',function(req,res){
-	var pinterest = pinterestAPI('godparty');
-	pinterest.getPinsFromBoard('project', true, function (pins) {
-		console.log(pins.data[0].images);
-		var url = pins.data[0].images['237x'].url;
-		res.render("image",{data: JSON.stringify(pins)});
-	});
-});
 app.get('/about',function(req,res){
 	res.render('about');
 });
@@ -69,15 +67,43 @@ app.get('/enroll',function(req,res){
 });
 app.post('/enroll_receive',function(req,res){
 	//name,email,nickname,password,confirm
+	console.log(req.body);
 	var info = req.body;
 	validation.enrollValidation(info,res);
+});
+app.post('/withdraw_receive',function(req,res){
+	withDraw.withDrawFunction(req.body.id,res);
 });
 app.post('/modifyInfo_receive',function(req,res){
 	var info = req.body;
 	modifyInfo.modifyInfoFunction(info,res);
 });
+app.get('/commuity',function(req,res){
+	board.noticeFunction(function(result){
+		var jsonStr = JSON.stringify(result);
+		if(result.length==0)
+			res.render('commuity',{data:0})
+		else
+			res.render('commuity',{data:jsonStr})
+	})
+});
+app.get('/write',function(req,res){
+	res.render('write');
+});
+app.post('/write_receive',function(req,res){
+	var responseData = {'result':'ok'}
+	models.Board.create({
+		title:req.body.title,
+		content:req.body.content,
+		fk_userId: member.mIdx,
+	}).then(function(){
+		res.json(responseData)
+	}).catch(function(err){
+		console.log(err)
+	})
+})
 app.get('/logout',function(req,res){
-	member.mId=null; member.mPwd = null; member.mName = null; member.mNick = null;
+	member.mId=null; member.mName = null; member.mNick = null;
 	member.mIsLogin = false;
 	res.render('index');
 });
@@ -86,7 +112,7 @@ app.post('/login_receive',function(req,res){
 	var pwd = req.body.login_password;
 	var responseData;
 	//로그인 메소드 호출
-	login.loginFunction(id,pwd,res);
+	login.loginFunction(id,sha256(pwd),res);
 });
 app.post('/practice_receive',function(req,res) {
 	//var title = req.body.title;
@@ -107,6 +133,9 @@ app.get('/index',function(req,res){
 app.get('/header',function(req,res){
 	res.render('header',{login:member.mIsLogin});
 });
+app.get('/challenge',function(req,res){
+	res.render('challenge');
+})
 
 app.listen(3000,function(){
 	console.log('server connected');

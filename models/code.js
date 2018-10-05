@@ -23,6 +23,5 @@ module.exports = function (sequelize, DataTypes) {
     // define the table's name
     tableName: 'code'
   });
-
-  return code;
+	return code;
 };

@@ -1,0 +1,38 @@
+#write{
+	margin-right:10%;
+}
+#search{
+	display:inline-block
+}
+
+table.type09 {
+	margin-left: auto;
+	margin-right: auto;
+    border-collapse: collapse;
+    line-height: 1.5;
+	width: 80%;
+	margin-top:3%;
+}
+table.type09 thead th {
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+	text-align:left;
+    color: #369;
+    border-bottom: 3px solid #036;
+}
+table.type09 tbody th {
+    width: 150px;
+    padding: 10px;
+    font-weight: bold;
+	text-align:center;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+    background: #f3f6f7;
+}
+table.type09 td {
+    width: 350px;
+    padding: 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #ccc;
+}
