@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 //var request = require('request');
 //var client = require('cheerio-httpcli');
 var language = require('@google-cloud/language');
-
 //templete engine and path
 app.set('view engine','pug');
 app.set('views','./views');
@@ -25,7 +24,7 @@ var chatbot = require('./function/chatBot');
 //login function
 var login = require('./function/login');
 //게시판
-var board = require('./function/notice');
+var board = require('./function/board');
 //enroll Validation function
 var validation = require('./function/enrollValidation');
 //modify info function
@@ -79,7 +78,7 @@ app.post('/modifyInfo_receive',function(req,res){
 	modifyInfo.modifyInfoFunction(info,res);
 });
 app.get('/commuity',function(req,res){
-	board.noticeFunction(function(result){
+	board.boardFunction(function(result){
 		var jsonStr = JSON.stringify(result);
 		if(result.length==0)
 			res.render('commuity',{data:0})
@@ -87,6 +86,15 @@ app.get('/commuity',function(req,res){
 			res.render('commuity',{data:jsonStr})
 	})
 });
+app.get('/commuity/:id',function(req,res){
+	var id = req.params.id;
+	models.Board.findAll({
+		where: {'id':id}
+	}).then(function(result){
+		var jsonObj = JSON.stringify(result)
+		res.render('commuity_detail',{data:jsonObj})
+	})
+})
 app.get('/write',function(req,res){
 	res.render('write');
 });
@@ -96,7 +104,7 @@ app.post('/write_receive',function(req,res){
 		title:req.body.title,
 		content:req.body.content,
 		fk_userId: member.mIdx,
-	}).then(function(){
+	}).then(function(result){
 		res.json(responseData)
 	}).catch(function(err){
 		console.log(err)

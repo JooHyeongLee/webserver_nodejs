@@ -1,0 +1,16 @@
+link(rel='stylesheet', href='css/bootstrap.css')
+link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
+ons-page
+	ons-toolbar
+	div(style='text-align: center; margin-top:3%;')
+		section(style='padding: 8px')
+			input.text-input#title(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;')
+		section(style='padding: 0 8px 8px')
+			textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;')
+
+script.
+	var data = !{data}
+	var title = document.getElementById('title');
+	var content = document.getElementById('content');
+	title.innerHTML = data[0].title
+	content.innerHTML = data[0].content

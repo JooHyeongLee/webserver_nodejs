@@ -10,7 +10,6 @@ table.type09(id='List')
 		th(scope='cols') 작 성 자 
 		th(scope='cols') 제 목
 	tbody#tbody
-
 p
 p(align="right")
 	button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
@@ -23,19 +22,24 @@ div(align="right" style="margin-right:10%;")
 		input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
 		button#search(type='button' onclick='searchFunction()') 검색 
 script.
-	var data = !{data}
-	if(data==0)
-		var len = 1
-	else{
+	$(document).ready(function(){
+		var data = !{data}
 		var len = Object.keys(data).length
 		var tbody = document.getElementById('tbody');
-		for(var i=0;i<len;i++){
-			tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th>"+data[i].title+"</th>"
-		}
-	}
-	$(document).ready(function(){
+		var len = 1
 		$('#navbar').load('http://localhost:3000/header')
+		if(data==0)
+			len = 1
+		else{
+			len = Object.keys(data).length
+			tbody = document.getElementById('tbody');
+			for(var i=0;i<len;i++){
+				tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th><a id=link"+i+" href=''>"+data[i].title+"</a></th>"
+				document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
+			}
+		}
 	});
+	alert(len)
 	function writeFunction(){
 		location.replace('http://localhost:3000/write')
 	}

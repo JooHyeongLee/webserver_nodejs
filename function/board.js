@@ -2,7 +2,7 @@ var models = require('../models');
 var member = require('./singleton');
 var async = require('async');
 
-function noticeFunction(callback) {
+function boardFunction(callback) {
 	models.Board.findAll().then(function(result){	//result가 board 테이블의 모든 값을 json으로 반환
 		var jsonObj = [];				//board 테이블의 데이터를 담을 배열
 		var tasks = [
@@ -50,4 +50,4 @@ function noticeFunction(callback) {
 		console.log(err);
 	})
 }
-exports.noticeFunction = noticeFunction;
+exports.boardFunction = boardFunction;
