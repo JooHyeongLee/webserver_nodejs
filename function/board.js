@@ -2,7 +2,7 @@ var models = require('../models');
 var member = require('./singleton');
 var async = require('async');
 
-function boardFunction(callback) {
+function boardLoadFunction(callback) {
 	models.Board.findAll().then(function(result){	//result가 board 테이블의 모든 값을 json으로 반환
 		var jsonObj = [];				//board 테이블의 데이터를 담을 배열
 		var tasks = [
@@ -50,4 +50,44 @@ function boardFunction(callback) {
 		console.log(err);
 	})
 }
-exports.boardFunction = boardFunction;
+function boardSearchFunction(opt,word,callback) {
+	var res = {'res':'null'}
+	if(opt.opt=='작성자'){
+		models.User.findAll({
+			where:{name:word.word}
+		}).then(function(user){
+			models.Board.findAll({
+				where:{fk_userId: user[0].dataValues.id}
+			}).then(function(user){
+				callback(user)
+			})
+		}).catch(function(err){
+			callback(res)
+		})
+	}
+	else if(opt.opt=='제목+내용'){
+		models.Board.findAll({
+			where: {subject: word.word}
+		}).then(function(user){
+			callback(user)
+		}).catch(function(err){
+			callback(res)
+		})
+	}
+}
+
+function boardWriteFunction(subject,content,fk_userId,callback){
+	var responseData = {'result':'ok'}
+	models.Board.create({
+		subject:subject,
+		content:content,
+		fk_userId: fk_userId,
+	}).then(function(result){
+		callback(responseData)
+	}).catch(function(err){
+		console.log(err)
+	})
+}
+exports.boardLoadFunction = boardLoadFunction;
+exports.boardSearchFunction = boardSearchFunction;
+exports.boardWriteFunction = boardWriteFunction;

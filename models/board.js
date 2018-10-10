@@ -1,7 +1,7 @@
 module.exports = function (sequelize, DataTypes) {
   const board = sequelize.define('Board', {
-	  title: {
-		  field: 'title', 
+	  subject: {
+		  field: 'subject', 
 		  type: DataTypes.STRING(30), 
 		  allowNull: false 
 	  },

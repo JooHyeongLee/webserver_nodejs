@@ -78,7 +78,7 @@ app.post('/modifyInfo_receive',function(req,res){
 	modifyInfo.modifyInfoFunction(info,res);
 });
 app.get('/commuity',function(req,res){
-	board.boardFunction(function(result){
+	board.boardLoadFunction(function(result){
 		var jsonStr = JSON.stringify(result);
 		if(result.length==0)
 			res.render('commuity',{data:0})
@@ -95,20 +95,20 @@ app.get('/commuity/:id',function(req,res){
 		res.render('commuity_detail',{data:jsonObj})
 	})
 })
+app.post('/commuity_search',function(req,res){
+	var opt = req.body;
+	var word = req.body;
+	board.boardSearchFunction(opt,word,function(result){
+		res.json(result)
+	})
+})
 app.get('/write',function(req,res){
 	res.render('write');
 });
 app.post('/write_receive',function(req,res){
-	var responseData = {'result':'ok'}
-	models.Board.create({
-		title:req.body.title,
-		content:req.body.content,
-		fk_userId: member.mIdx,
-	}).then(function(result){
-		res.json(responseData)
-	}).catch(function(err){
-		console.log(err)
-	})
+	board.boardWriteFunction(req.body.subject,req.body.content,member.mIdx,function(result){
+		res.json(result)
+	})	
 })
 app.get('/logout',function(req,res){
 	member.mId=null; member.mName = null; member.mNick = null;

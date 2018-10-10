@@ -15,7 +15,7 @@ p(align="right")
 	button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
 div(align="right" style="margin-right:10%;")
 	section
-		select(name='option' style='margin-bottom:4%;')
+		select#option(name='option' style='margin-bottom:4%;')
 			option(value="") 선택
 			option(value="작성자") 작성자
 			option(value="제목+내용") 제목+내용
@@ -34,7 +34,7 @@ script.
 			len = Object.keys(data).length
 			tbody = document.getElementById('tbody');
 			for(var i=0;i<len;i++){
-				tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th><a id=link"+i+" href=''>"+data[i].title+"</a></th>"
+				tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th><a id=link"+i+" href=''>"+data[i].subject+"</a></th>"
 				document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
 			}
 		}
@@ -44,7 +44,27 @@ script.
 		location.replace('http://localhost:3000/write')
 	}
 	function searchFunction(){
-		
+		var opt = document.getElementById('option').value
+		var word = document.getElementById('searchWord').value
+		var data = {'opt':opt, 'word':word}
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST','http://localhost:3000/commuity_search',true)
+		xhr.setRequestHeader('Content-type','application/json')
+		xhr.send(JSON.stringify(data))
+		xhr.addEventListener('load',function(){
+			tbody.innerHTML ='' 
+			var result = JSON.parse(xhr.responseText);
+			if(result.res=='null')
+				tbody.innerHTML = '일치하는 결과가 없습니다.'	
+			else {
+				var i =0;
+				result.forEach(function(element){
+					tbody.innerHTML += "<th>"+word+"</th><th>"+"<a id=link"+i+" href=''>"+element.subject+"</th>"
+					document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
+					i++
+				})
+			}
+		})
 	}
 
 

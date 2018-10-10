@@ -4,18 +4,18 @@ ons-page
 	ons-toolbar
 	div(style='text-align: center; margin-top:3%;')
 		section(style='padding: 8px')
-			input.text-input#title(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;')
+			textarea.text-input#subject(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;')
 		section(style='padding: 0 8px 8px')
 			textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;')
 		section(style='padding: 0 8px 8px')
 			button(type="button" class='btn btn-primary' onclick='submitFunction()') Submit
 
 script.
-	var title = document.getElementById('title');
+	var subject = document.getElementById('subject');
 	var content = document.getElementById('content');
 	var url = 'http://localhost:3000/write_receive';
 	function submitFunction() {
-		var data = {'title':title.value, 'content':content.value};
+		var data = {'subject':subject.value, 'content':content.value};
 		data = JSON.stringify(data);
 		var xhr = new XMLHttpRequest();
 		xhr.open('POST',url,true);
