@@ -18,7 +18,7 @@ div(align="right" style="margin-right:10%;")
 		select#option(name='option' style='margin-bottom:4%;')
 			option(value="") 선택
 			option(value="작성자") 작성자
-			option(value="제목+내용") 제목+내용
+			option(value="제목") 제목
 		input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
 		button#search(type='button' onclick='searchFunction()') 검색 
 script.
@@ -39,7 +39,6 @@ script.
 			}
 		}
 	});
-	alert(len)
 	function writeFunction(){
 		location.replace('http://localhost:3000/write')
 	}
@@ -54,15 +53,24 @@ script.
 		xhr.addEventListener('load',function(){
 			tbody.innerHTML ='' 
 			var result = JSON.parse(xhr.responseText);
-			if(result.res=='null')
+			if(result.result.res=='null')
 				tbody.innerHTML = '일치하는 결과가 없습니다.'	
 			else {
 				var i =0;
-				result.forEach(function(element){
-					tbody.innerHTML += "<th>"+word+"</th><th>"+"<a id=link"+i+" href=''>"+element.subject+"</th>"
-					document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
-					i++
-				})
+				if(opt=='작성자'){
+					result.result.forEach(function(element){
+						tbody.innerHTML += "<th>"+word+"</th><th><a id=link"+i+" href=''>"+element.subject+"</th>"
+						document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
+						i++
+					})
+				}
+				else{
+					result.result.forEach(function(element){
+						tbody.innerHTML += "<th>"+result.name[i].name+"</th><th>"+"<a id=link"+i+" href=''>"+element.subject+"</th>"
+						document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
+						i++
+					})
+				}
 			}
 		})
 	}

@@ -65,15 +65,30 @@ function boardSearchFunction(opt,word,callback) {
 			callback(res)
 		})
 	}
-	else if(opt.opt=='제목+내용'){
+	else if(opt.opt=='제목'){
+		var i = 0
+		var names=[]
 		models.Board.findAll({
-			where: {subject: word.word}
-		}).then(function(user){
-			callback(user)
+			where: {subject:word.word}
+		}).then(function(board){
+			if(board.length==0)
+				callback(res)
+			board.forEach(function(element){
+				models.User.findAll({
+					where: {id: element.dataValues.fk_userId}
+				}).then(function(user){
+					names[i] = {'name':user[0].dataValues.name}
+					i++
+					if(board.length==i)
+						callback(board,names)
+				})
+			})
 		}).catch(function(err){
 			callback(res)
 		})
 	}
+	else
+		callback(res)
 }
 
 function boardWriteFunction(subject,content,fk_userId,callback){

@@ -98,8 +98,11 @@ app.get('/commuity/:id',function(req,res){
 app.post('/commuity_search',function(req,res){
 	var opt = req.body;
 	var word = req.body;
-	board.boardSearchFunction(opt,word,function(result){
-		res.json(result)
+	board.boardSearchFunction(opt,word,function(result,name){
+		res.json({
+			result: result,
+			name: name
+		})
 	})
 })
 app.get('/write',function(req,res){
