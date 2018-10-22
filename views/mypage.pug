@@ -71,9 +71,9 @@ script.
   $('#navbar').load('http://localhost:3000/header') 
  });
  var info = !{data};
- document.getElementById('email').value=info.mId;
- document.getElementById('name').value=info.mName;
- document.getElementById('nickname').value=info.mNick;
+ document.getElementById('email').value=info.user_id;
+ document.getElementById('name').value=info.name;
+ document.getElementById('nickname').value=info.nick;
  function modify(){
  var name = document.getElementById('name').value;
  var email = document.getElementById('email').value;

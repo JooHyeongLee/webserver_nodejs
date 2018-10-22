@@ -5,6 +5,8 @@ var app = express();
 var fs = require('fs');
 var spawn = require('child_process').spawn;
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
 //var request = require('request');
 //var client = require('cheerio-httpcli');
 var language = require('@google-cloud/language');
@@ -13,6 +15,12 @@ app.set('view engine','pug');
 app.set('views','./views');
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(cookieParser())
+app.use(session({
+	secret:'123123123',
+	resave:false,
+	saveUninitialize:true
+}));
 //public directory path setting
 app.use(express.static(__dirname));
 //singleton
@@ -53,8 +61,13 @@ app.get('/practice',function(req,res){
 	res.render("practice");
 });
 app.get('/mypage',function(req,res) {
-	if(member.mIsLogin)
-		res.render('mypage',{data:JSON.stringify(member)});
+	if(req.session.login){
+		models.User.findOne({
+			where: {id: req.session.idx}
+		}).then(function(info){
+			res.render('mypage',{data: JSON.stringify(info.dataValues)});
+		})
+	}
 	else
 		res.send("<script>alert('로그인이 필요합니다.')</script><meta http-equiv='refresh' content='0; url=http://localhost:3000/login'</meta>");
 });
@@ -109,13 +122,13 @@ app.get('/write',function(req,res){
 	res.render('write');
 });
 app.post('/write_receive',function(req,res){
-	board.boardWriteFunction(req.body.subject,req.body.content,member.mIdx,function(result){
+	board.boardWriteFunction(req.body.subject,req.body.content,req.session.idx,function(result){
 		res.json(result)
 	})	
 })
 app.get('/logout',function(req,res){
-	member.mId=null; member.mName = null; member.mNick = null;
-	member.mIsLogin = false;
+	member.mId=member.mIdx=member.mName=member.mNick=null
+	req.session.login = false	//login session 변경
 	res.render('index');
 });
 app.post('/login_receive',function(req,res){
@@ -123,7 +136,7 @@ app.post('/login_receive',function(req,res){
 	var pwd = req.body.login_password;
 	var responseData;
 	//로그인 메소드 호출
-	login.loginFunction(id,sha256(pwd),res);
+	login.loginFunction(id,sha256(pwd),res,req);
 });
 app.post('/practice_receive',function(req,res) {
 	//var title = req.body.title;
@@ -139,16 +152,18 @@ app.post('/practice_chatting',function(req,res){
 	chatbot.chatBotFunction(chat,res);
 });
 app.get('/index',function(req,res){
+	if(!req.session.login){
+		req.session.login = false
+		req.session.idx = -1
+	}
 	res.render('index');
 });
 app.get('/header',function(req,res){
-	res.render('header',{login:member.mIsLogin});
+	res.render('header',{login:req.session.login});
 });
 app.get('/challenge',function(req,res){
 	res.render('challenge');
 })
-
 app.listen(3000,function(){
 	console.log('server connected');
 });
-

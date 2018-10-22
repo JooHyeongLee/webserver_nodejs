@@ -10,7 +10,6 @@ function withDrawFunction(idx,res) {
 			console.log('Delete');
 			responseData = {'result':'ok'}
 			member.mId=null; member.mPwd = null; member.mName = null; member.mNick = null;
-			member.mIsLogin = false;
 			res.json(responseData);
 		}
 	});

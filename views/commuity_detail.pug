@@ -2,14 +2,18 @@ script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
 link(rel='stylesheet', href='css/bootstrap.css')
 link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
 base(href='/')
-#navbar
-ons-page
-	ons-toolbar
-	div(style='text-align: center; margin-top:3%;')
-		section(style='padding: 8px')
-			textarea.text-input#subject(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;' readonly='readonly')
-		section(style='padding: 0 8px 8px')
-			textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;' readonly='readonly')
+link#custom-css(href='custom_css/spinner.css', rel='stylesheet')
+body(onload='myFunction()' style='margin:0;')
+#loader(style='visibility:visible;')
+#page(style='visibility:hidden;')
+	#navbar
+	ons-page
+		ons-toolbar
+		div(style='text-align: center; margin-top:3%;')
+			section(style='padding: 8px')
+				textarea.text-input#subject(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;' readonly='readonly')
+			section(style='padding: 0 8px 8px')
+				textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;' readonly='readonly')
 
 script.
 	$(document).ready(function(){
@@ -20,3 +24,12 @@ script.
 	var content = document.getElementById('content');
 	subject.innerHTML = data[0].subject
 	content.innerHTML = data[0].content
+
+	function myFunction() {
+		loading = setTimeout(showPage, 700);
+	}
+
+	function showPage() {
+		document.getElementById("loader").style.visibility = "hidden";
+		document.getElementById('page').style.visibility = 'visible';
+	}
