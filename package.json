@@ -24,6 +24,8 @@
     "mysql-monitor": "0.0.1",
     "mysql2": "^1.5.3",
     "parse-json": "^4.0.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
     "popper.js": "^1.14.3",
     "pug": "^2.0.3",
     "request": "^2.87.0",

@@ -7,6 +7,8 @@ var spawn = require('child_process').spawn;
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
+var fb = require('./function/fbLogin')
+var passport = require('passport')
 //var request = require('request');
 //var client = require('cheerio-httpcli');
 var language = require('@google-cloud/language');
@@ -21,8 +23,15 @@ app.use(session({
 	resave:false,
 	saveUninitialize:true
 }));
-//public directory path setting
 app.use(express.static(__dirname));
+app.use(passport.initialize());
+app.use(passport.session());
+function ensureAuthenticated(req, res, next) {
+    // 로그인이 되어 있으면, 다음 파이프라인으로 진행
+    if (req.isAuthenticated()) { return next(); }
+    // 로그인이 안되어 있으면, login 페이지로 진행
+    res.redirect('/');
+}
 //singleton
 var member = require('./function/singleton');
 //comfile function
@@ -31,6 +40,8 @@ var comp = require('./function/compiler');
 var chatbot = require('./function/chatBot');
 //login function
 var login = require('./function/login');
+//facebook login success
+var fbLogined = require('./function/fbLoginSuccess')
 //게시판
 var board = require('./function/board');
 //enroll Validation function
@@ -71,9 +82,23 @@ app.get('/mypage',function(req,res) {
 	else
 		res.send("<script>alert('로그인이 필요합니다.')</script><meta http-equiv='refresh' content='0; url=http://localhost:3000/login'</meta>");
 });
+app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/auth/facebook/callback',
+	passport.authenticate('facebook', { 
+		successRedirect: '/login_success',
+		failureRedirect: '/login_fail' 
+	})
+);
 app.get('/login',function(req,res){
 	res.render('login');
 });
+app.get('/login_success', ensureAuthenticated, function(req, res){
+	req.session.login = req.isAuthenticated()
+	fbLogined.fbLoginSuccess(req)	//db저장
+	console.log('성공시 세션값',req.session)
+	res.redirect('/index')
+});
+
 app.get('/enroll',function(req,res){
 	res.render('enroll');
 });
@@ -156,6 +181,8 @@ app.get('/index',function(req,res){
 		req.session.login = false
 		req.session.idx = -1
 	}
+	console.log('여기')
+	console.log(req.session)
 	res.render('index');
 });
 app.get('/header',function(req,res){
@@ -165,5 +192,6 @@ app.get('/challenge',function(req,res){
 	res.render('challenge');
 })
 app.listen(3000,function(){
+	fb.fbLogin()
 	console.log('server connected');
 });
