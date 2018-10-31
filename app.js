@@ -93,10 +93,18 @@ app.get('/login',function(req,res){
 	res.render('login');
 });
 app.get('/login_success', ensureAuthenticated, function(req, res){
-	req.session.login = req.isAuthenticated()
 	fbLogined.fbLoginSuccess(req)	//db저장
+	req.session.login = req.isAuthenticated()
+	models.User.findOne({
+		where:{user_id: 'fb'+req.session.passport.user.id}
+	}).then(function(info){
+		req.session.idx = info.dataValues.id
+		req.session.save(function(){
+			res.redirect('index');
+		});
+	})
 	console.log('성공시 세션값',req.session)
-	res.redirect('/index')
+	//res.send("<meta http-equiv='refresh' content='0; url=http://localhost:3000/index'</meta>");
 });
 
 app.get('/enroll',function(req,res){
@@ -153,8 +161,10 @@ app.post('/write_receive',function(req,res){
 })
 app.get('/logout',function(req,res){
 	member.mId=member.mIdx=member.mName=member.mNick=null
-	req.session.login = false	//login session 변경
-	res.render('index');
+	req.session.destroy(function(){
+		req.session;
+	})
+	res.send("<meta http-equiv='refresh' content='0; url=http://localhost:3000/index'</meta>");
 });
 app.post('/login_receive',function(req,res){
 	var id = req.body.login_id;
@@ -177,7 +187,7 @@ app.post('/practice_chatting',function(req,res){
 	chatbot.chatBotFunction(chat,res);
 });
 app.get('/index',function(req,res){
-	if(!req.session.login){
+	if(req.session.login == undefined){
 		req.session.login = false
 		req.session.idx = -1
 	}
