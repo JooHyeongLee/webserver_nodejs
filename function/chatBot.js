@@ -2,41 +2,22 @@ var client = require('cheerio-httpcli');
 var language = require('@google-cloud/language');
 function chatBotFunction(chat,res){
 	var responseData;
-	const client = new language.LanguageServiceClient();
-	const document = {
-		content: chat,
-		type:'PLAIN_TEXT',
-	};
-		// Detects syntax in the document
-		client
-		  .analyzeSyntax({document: document})
-		  .then(results => {
-			const syntax = results[0];
-
-			console.log('Tokens:');
-			syntax.tokens.forEach(part => {
-			  console.log(`${part.partOfSpeech.tag}: ${part.text.content}`);
-			  console.log(`Morphology:`, part.partOfSpeech);
-			});
-		  })
-		  .catch(err => {
-			console.error('ERROR:', err);
-		  });
-	
 		if(chat.match(/검색/)){
 		var i = chat.indexOf("검색",0);
 		var word = chat.substring(0,i);
-		if(word.length<1){
-			responseData = {'result':'no','answer':'형식에 맞지 않는 검색단어'};
-			res.json(responseData);
-			return;
-		}
-		var aList;
-		client.fetch('http://www.google.com/search',{q:word},function(err,$,response,body){
-			aList = $("div.rc").find(".r").find("a");
-			responseData = {'result' : 'search', 'answer':aList[0].attribs.href};
-			res.json(responseData);
-		});
+			if(word.length<1){
+				responseData = {'result':'no','answer':'형식에 맞지 않는 검색단어'};
+				res.json(responseData);
+				return;
+			}
+			else{
+				var aList;	
+				client.fetch('http://www.google.com/search',{q:word},function(err,$,response,body){
+				aList = $("div.rc").find(".r").find("a");
+				responseData = {'result' : 'search', 'answer':aList[0].attribs.href};
+				res.json(responseData);
+				});
+			}
 	}
 	if(chat.match(/warning/)||chat.match(/error/)) {
 		if(chat.match(/format/))

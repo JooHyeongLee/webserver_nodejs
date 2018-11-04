@@ -8,7 +8,6 @@ var member = require('./singleton');
 function compileFunction(lan,path,source,res){
 	var file, compile,run,responseData;
 	var final = false;
-	var cnt=1;
 	var tasks = [
 		function(callback){
 			if(lan=='c')
@@ -68,15 +67,6 @@ function compileFunction(lan,path,source,res){
 			res.json(responseData);
 			console.log('done');
 		}
-	});
-
-	//DB저장
-	models.Code.create({
-		title: 'test',
-		code: source,
-		fk_userId: member.mIdx
-	}).catch(function(err) {
-		console.error(err);
 	});
 }
 exports.compileFunction = compileFunction;

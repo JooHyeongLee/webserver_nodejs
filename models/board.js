@@ -10,6 +10,12 @@ module.exports = function (sequelize, DataTypes) {
 		  type: DataTypes.STRING(100), 
 		  allowNull: false 
 	  },
+	  count:{
+		  field:'count',
+		  type:DataTypes.INTEGER,
+		  allowNull:false,
+		  defaultValue:0
+	  }
   }, {
     // don't use camelcase for automatically added attributes but underscore style
     // so updatedAt will be updated_a

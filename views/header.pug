@@ -1,78 +1,43 @@
 doctype html
 head
-	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
 	meta(charset='utf-8')
-	meta(http-equiv='X-UA-Compatible', content='IE=edge')
-	meta(name='viewport', content='width=device-width, initial-scale=1')
-	// The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
-	meta(name='description', content='')
-	meta(name='author', content='')
-	link(rel='icon', href='../../favicon.ico')
 	title CodingTogether
-	// Bootstrap core CSS
-	link(rel='stylesheet', href='css/bootstrap.css')
-	// Custom styles for this template
 	link(href='css/jumbotron.css', rel='stylesheet')
-style.
-	.nav-pills{   
-		display: flex;
-		padding-top:5px;
-	}
-	/* ANIMATED MINUS */
-	.navbar-toggle.minus.collapsed .icon-bar:nth-of-type(1) {
-		transform: translate3d(0,0,0) rotate(0deg);
-	}
-
-	.navbar-toggle.minus.collapsed .icon-bar:nth-of-type(2) {
-		transform: translate3d(0,0,0) rotate(0deg);
-	}
-
-	.navbar-toggle.minus.collapsed .icon-bar:nth-of-type(3) {
-		transform: translate3d(0,0,0) rotate(0deg);
-	}
-
-	.navbar-toggle.minus .icon-bar:nth-of-type(1) {
-		transform: translate3d(0,6px,0);
-	}
-
-	.navbar-toggle.minus .icon-bar:nth-of-type(3) {
-		transform: translate3d(0,-6px,0);
-	}
-	/* END ANIMATED MINUS */
-nav.navbar.navbar-default
+	meta(name='viewport', content='width=device-width, initial-scale=1')
+	link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+	script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+nav.navbar.navbar-inverse
 	.container-fluid
 		.navbar-header
-			button.navbar-toggle(type='button' class='navbar-toggle minus collapsed' data-toggle='collapse' data-target='#navbar-collapse-minus')
-				span.sr-only
+			button.navbar-toggle(type='button', data-toggle='collapse', data-target='#myNavbar')
 				span.icon-bar
 				span.icon-bar
 				span.icon-bar
-			a.navbar-brand(href='index') CodingTogether
-		#navbar-collapse.minus.collapse.navbar-collapse
-			ul.nav.navbar-nav.navbar-left
-				li(data-toggle='collapse', data-target='#navbar-collapse.in')
-					a(href='about')
-						| About us
-						span.sr-only
-				li(data-toggle='collapse', data-target='#navbar-collapse.in')
-					a(href='practice') Practice 
+			a.navbar-brand(href='#') WebSiteName
+		#myNavbar.collapse.navbar-collapse
+			ul.nav.navbar-nav
 				li.active
-					a(href='#')
-						| Dictinoary
-						span.sr-only
-				li
-					a(href='commuity')
-						| Commuity
-						span.sr.only
-			ol.nav.nav-pills.pull-right
-				li.active(role='presentation')
 					a(href='index') Home
-				li(role='presentation')
-					a#login(href='login') 로그인
-				li(role='presentation')
-					a#logout(href='logout') 로그아웃
-				li(role='presentation')
-					a(href='mypage') 마이페이지
+				li
+					a(href='practice') Practice
+				li
+					a(href='commuity') Commuity
+				li
+					a(href='about') About us
+			ul.nav.navbar-nav.navbar-right
+				li
+					a#login(href='login')
+						span.glyphicon.glyphicon-log-in
+						|	Login
+					a#logout(href='logout')
+						span.glyphicon.glyphicon-log-in
+						|	Logout
+				li
+					a(href='mypage')
+						span.glyphicon.glyphicon-user
+						|	마이 페이지
+
 		script.
 			var f = !{login};
 			$(document).ready(function(){
@@ -85,6 +50,4 @@ nav.navbar.navbar-default
 					$("#login").show()
 				}
 			});
-			script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
-	script(src='../../assets/js/ie10-viewport-bug-workaround.js')
 

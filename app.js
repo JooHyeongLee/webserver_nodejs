@@ -137,6 +137,8 @@ app.get('/commuity/:id',function(req,res){
 	models.Board.findAll({
 		where: {'id':id}
 	}).then(function(result){
+		models.Board.update({count:++result[0].dataValues.count},
+			{where: {'id':id} })
 		var jsonObj = JSON.stringify(result)
 		res.render('commuity_detail',{data:jsonObj})
 	})
@@ -196,6 +198,8 @@ app.get('/index',function(req,res){
 	res.render('index');
 });
 app.get('/header',function(req,res){
+	if(req.session.login==undefined)
+		req.session.login=false
 	res.render('header',{login:req.session.login});
 });
 app.get('/challenge',function(req,res){

@@ -3,77 +3,96 @@ link#custom-css(href='custom_css/commuity.css', rel='stylesheet')
 // Bootstrap core CSS
 link(rel='stylesheet', href='css/bootstrap.css')
 link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
-#navbar
-table.type09(id='List')
-	thead
-	tr
-		th(scope='cols') 작 성 자 
-		th(scope='cols') 제 목
-	tbody#tbody
-p
-p(align="right")
-	button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
-div(align="right" style="margin-right:10%;")
-	section
-		select#option(name='option' style='margin-bottom:4%;')
-			option(value="") 선택
-			option(value="작성자") 작성자
-			option(value="제목") 제목
-		input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
-		button#search(type='button' onclick='searchFunction()') 검색 
-script.
-	$(document).ready(function(){
+link#custom-css(href='custom_css/spinner.css', rel='stylesheet')
+body(onload='myFunction()' style='margin:0;')
+#loader(style='visibility:visible;')
+#page(style='visibility:hidden;')
+	#navbar
+	table.type09(id='List')
+		thead
+		tr
+			th(scope='cols' style="width:10%") nums 
+			th(scope='cols' style="width:55%") Title
+			th(scope='cols' style="width:10%") Views 
+			th(scope='cols') Date
+			th(scope='cols' style="width:10%") Author
+		tbody#tbody
+	p
+	p(align="right")
+		button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
+	div(align="right" style="margin-right:10%;")
+		section
+			select#option(name='option' style='margin-bottom:4%;')
+				option(value="") 선택
+				option(value="작성자") 작성자
+				option(value="제목") 제목
+			input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
+			button#search(type='button' onclick='searchFunction()') 검색 
+	script.
 		var data = !{data}
 		var len = Object.keys(data).length
-		var tbody = document.getElementById('tbody');
-		var len = 1
-		$('#navbar').load('http://localhost:3000/header')
-		if(data==0)
-			len = 1
-		else{
-			len = Object.keys(data).length
-			tbody = document.getElementById('tbody');
-			for(var i=0;i<len;i++){
-				tbody.innerHTML += "<th>"+data[i].name+"</th>"+"<th><a id=link"+i+" href=''>"+data[i].subject+"</a></th>"
-				document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
+		$(document).ready(function(){
+			var tbody = document.getElementById('tbody');
+			$('#navbar').load('http://localhost:3000/header')
+			if(data==0)
+				len = 1
+			else{
+				len = Object.keys(data).length
+				tbody = document.getElementById('tbody');
+				for(var i=0;i<len;i++){
+					tbody.innerHTML += "<th>"+(i+1)+"</th>"
+					+"<th><a id=link"+i+" href='' onclick='countViews(\" "+i+" \")'>"+data[i].subject+"</a></th>"
+					+"<th>"+data[i].count+"</th>"
+					+"<th>"+data[i].created_at.substr(0,10)+ "</th>"
+					+"<th>"+data[i].name+"</th>"
+					document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
+				}
 			}
+		});
+		function myFunction() {
+			loading = setTimeout(showPage, 700);
 		}
-	});
-	function writeFunction(){
-		location.replace('http://localhost:3000/write')
-	}
-	function searchFunction(){
-		var opt = document.getElementById('option').value
-		var word = document.getElementById('searchWord').value
-		var data = {'opt':opt, 'word':word}
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST','http://localhost:3000/commuity_search',true)
-		xhr.setRequestHeader('Content-type','application/json')
-		xhr.send(JSON.stringify(data))
-		xhr.addEventListener('load',function(){
-			tbody.innerHTML ='' 
-			var result = JSON.parse(xhr.responseText);
-			if(result.result.res=='null')
-				tbody.innerHTML = '일치하는 결과가 없습니다.'	
-			else {
-				var i =0;
-				if(opt=='작성자'){
-					result.result.forEach(function(element){
-						tbody.innerHTML += "<th>"+word+"</th><th><a id=link"+i+" href=''>"+element.subject+"</th>"
-						document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
-						i++
-					})
-				}
-				else{
-					result.result.forEach(function(element){
-						tbody.innerHTML += "<th>"+result.name[i].name+"</th><th>"+"<a id=link"+i+" href=''>"+element.subject+"</th>"
-						document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
-						i++
-					})
-				}
-			}
-		})
-	}
 
-
-	
+		function showPage() {
+			document.getElementById("loader").style.visibility = "hidden";
+			document.getElementById('page').style.visibility = 'visible';
+		}
+		function writeFunction(){
+			location.replace('http://localhost:3000/write')
+		}
+		function searchFunction(){
+			var opt = document.getElementById('option').value
+			var word = document.getElementById('searchWord').value
+			var data = {'opt':opt, 'word':word}
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST','http://localhost:3000/commuity_search',true)
+			xhr.setRequestHeader('Content-type','application/json')
+			xhr.send(JSON.stringify(data))
+			xhr.addEventListener('load',function(){
+				tbody.innerHTML ='' 
+				var result = JSON.parse(xhr.responseText);
+				if(result.result.res=='null')
+					tbody.innerHTML = '일치하는 결과가 없습니다.'	
+				else {
+					var i =0;
+					if(opt=='작성자'){
+						result.result.forEach(function(element){
+							tbody.innerHTML += "<th>"+(i+1)+"</th>"
+							+"<th><a id=link"+i+" href=''>"+element.subject+"</a></th>"
+							+"<th>"+element.count+"</th>"
+							+"<th>"+element.created_at.substr(0,10)+"</th>"
+							+"<th>"+word+"</th>"
+							document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
+							i++
+						})
+					}
+					else{
+						result.result.forEach(function(element){
+							tbody.innerHTML += "<th>"+result.name[i].name+"</th><th>"+"<a id=link"+i+" href=''>"+element.subject+"</th>"
+							document.getElementById("link"+i).setAttribute('href','commuity/'+element.id)
+							i++
+						})
+					}
+				}
+			})
+		}
