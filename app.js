@@ -9,8 +9,6 @@ var cookieParser = require('cookie-parser')
 var session = require('express-session')
 var fb = require('./function/fbLogin')
 var passport = require('passport')
-//var request = require('request');
-//var client = require('cheerio-httpcli');
 var language = require('@google-cloud/language');
 //templete engine and path
 app.set('view engine','pug');

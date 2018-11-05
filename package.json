@@ -4,7 +4,7 @@
   "description": "server side javascript tutorials",
   "main": "app.js",
   "scripts": {
-    "start": "supervisor app.js",
+    "start": "node ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
