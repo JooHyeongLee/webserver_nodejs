@@ -12,10 +12,16 @@ router.get('/:id',function(req,res){
 	models.Board.findAll({
 		where: {'id':id}
 	}).then(function(result){
-		models.Board.update({count:++result[0].dataValues.count},
-			{where: {'id':id} })
-		var jsonObj = JSON.stringify(result)
-		res.render('commuity_detail',{data:jsonObj})
+		//user name search
+		models.User.findOne({
+			where:{'id':result[0].dataValues.fk_userId}
+		}).then(function(info){
+			models.Board.update({count:++result[0].dataValues.count},
+				{where: {'id':id} })
+			var jsonObj = JSON.stringify(result)
+			var infoObj = JSON.stringify(info)
+			res.render('commuity_detail',{data:jsonObj, info:infoObj})
+		})
 	})
 })
 

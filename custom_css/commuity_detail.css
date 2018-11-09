@@ -1,0 +1,36 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 80%;
+	margin: 0 auto;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+	
+}
+textarea{
+  background-color: white;
+  border-width: 0 0 1px;
+  border-color: #DCDCDC;
+  border-style: solid;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  display: inline-block;
+  font-family: 'Raleway', sans-serif;
+  font-size: 15px;
+  height: 120px;
+  line-height: 25px;
+  min-width: 305px;
+  margin-top: 20px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  width: 10%;
+  -webkit-appearance: none;
+  vertical-align: top;
+  resize:none;
+}

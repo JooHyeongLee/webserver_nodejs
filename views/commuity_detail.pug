@@ -3,6 +3,7 @@ link(rel='stylesheet', href='css/bootstrap.css')
 link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
 base(href='/')
 link#custom-css(href='custom_css/spinner.css', rel='stylesheet')
+link#custom-css(href='custom_css/commuity_detail.css',rel='stylesheet')
 body(onload='myFunction()' style='margin:0;')
 #loader(style='visibility:visible;')
 #page(style='visibility:hidden;')
@@ -10,20 +11,32 @@ body(onload='myFunction()' style='margin:0;')
 	ons-page
 		ons-toolbar
 		div(style='text-align: center; margin-top:3%;')
-			section(style='padding: 8px')
-				textarea.text-input#subject(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;' readonly='readonly')
-			section(style='padding: 0 8px 8px')
-				textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;' readonly='readonly')
+			.container
+				.card
+					section(style='padding: 8px')
+						#author(style='text-align:left; margin-left:2%;') 작성자 : 
+						#createdDate(style='text-align:left; margin-left:2%;') 
+					section(style='padding: 8px')
+						textarea.text-input#subject(type='text', ng-model='text', placeholder='제목', style='width: 80%; height:30px;' readonly='readonly')
+					section(style='padding: 0 8px 8px')
+						textarea.textarea#content(ng-model='text2', placeholder='내용', style='width: 80%; height: 400px;' readonly='readonly')
+
+			button(type='button', class='btn btn-primary', align='right', onclick='back()', style='margin-top:2%;') 목룍으로 
 
 script.
 	$(document).ready(function(){
 		$('#navbar').load('http://localhost:3000/header')
 	});
 	var data = !{data}
+	var info = !{info}
 	var subject = document.getElementById('subject');
 	var content = document.getElementById('content');
+	var author = document.getElementById('author');
+	var createdDate = document.getElementById('createdDate');
 	subject.innerHTML = data[0].subject
 	content.innerHTML = data[0].content
+	author.innerHTML += info.name
+	createdDate.innerHTML = data[0].created_at.substr(0,10)
 
 	function myFunction() {
 		loading = setTimeout(showPage, 700);
@@ -32,4 +45,7 @@ script.
 	function showPage() {
 		document.getElementById("loader").style.visibility = "hidden";
 		document.getElementById('page').style.visibility = 'visible';
+	}
+	function back(){
+		location.href = 'http://localhost:3000/commuity'
 	}
