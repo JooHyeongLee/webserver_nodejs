@@ -29,6 +29,7 @@ var facebookSuccessRouter = require('./routes/login_success')
 var loginReceiveRouter = require('./routes/login_receive');
 var writeReceiveRouter = require('./routes/write_receive');
 var enrollReceiveRouter = require('./routes/enroll_receive');
+var commuityReceiveRouter = require('./routes/commuity_search');
 //sequelize
 models.sequelize.sync()
 	.then(function() {
@@ -79,6 +80,7 @@ app.use('/login_success',facebookSuccessRouter);
 app.use('/login_receive',loginReceiveRouter);
 app.use('/write_receive',writeReceiveRouter);
 app.use('/enroll_receive',enrollReceiveRouter);
+app.use('/commuity_receive',commuityReceiveRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

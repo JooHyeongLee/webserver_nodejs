@@ -3,7 +3,8 @@ link#custom-css(href='custom_css/commuity.css', rel='stylesheet')
 // Bootstrap core CSS
 link(rel='stylesheet', href='css/bootstrap.css')
 link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
-link#custom-css(href='custom_css/spinner.css', rel='stylesheet')
+link(href='custom_css/spinner.css', rel='stylesheet')
+link(href='custom_css/pagination.css' rel='stylesheet')
 body(onload='myFunction()' style='margin:0;')
 #loader(style='visibility:visible;')
 #page(style='visibility:hidden;')
@@ -17,7 +18,11 @@ body(onload='myFunction()' style='margin:0;')
 			th(scope='cols') Date
 			th(scope='cols' style="width:10%") Author
 		tbody#tbody
-	p
+	.center
+		.pagination
+			//a(href='#') &laquo;
+			#tpage
+			//a(href='#') &raquo;
 	p(align="right")
 		button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
 	div(align="right" style="margin-right:10%;")
@@ -30,6 +35,7 @@ body(onload='myFunction()' style='margin:0;')
 			button#search(type='button' onclick='searchFunction()') 검색 
 	script.
 		var data = !{data}
+		var pagination =!{page} 
 		var len = Object.keys(data).length
 		$(document).ready(function(){
 			var tbody = document.getElementById('tbody');
@@ -47,12 +53,13 @@ body(onload='myFunction()' style='margin:0;')
 					+"<th>"+data[i].name+"</th>"
 					document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
 				}
+				for(var i=0;i<pagination;i++)
+					document.getElementById("tpage").innerHTML+="<a id=page"+i+" href=commuity?page="+(i+1)+">" +(i+1)
 			}
 		});
 		function myFunction() {
 			loading = setTimeout(showPage, 700);
 		}
-
 		function showPage() {
 			document.getElementById("loader").style.visibility = "hidden";
 			document.getElementById('page').style.visibility = 'visible';
@@ -65,7 +72,7 @@ body(onload='myFunction()' style='margin:0;')
 			var word = document.getElementById('searchWord').value
 			var data = {'opt':opt, 'word':word}
 			var xhr = new XMLHttpRequest();
-			xhr.open('POST','http://localhost:3000/commuity_search',true)
+			xhr.open('POST','http://localhost:3000/commuity_receive',true)
 			xhr.setRequestHeader('Content-type','application/json')
 			xhr.send(JSON.stringify(data))
 			xhr.addEventListener('load',function(){
