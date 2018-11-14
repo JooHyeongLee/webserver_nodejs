@@ -1,5 +1,5 @@
-var models=require('../models')
-var sha256 = require('sha256')
+let models=require('../models')
+let sha256 = require('sha256')
 function fbLoginSuccess(req) {
 	models.User.findOne({
 		where:{user_id:'fb'+req.session.passport.user.id}

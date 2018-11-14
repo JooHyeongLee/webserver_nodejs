@@ -1,5 +1,5 @@
-var SingletonClass = (function() {
-	var mName,mNick,mId,mPwd,instance;
+let SingletonClass = (function() {
+	let mName,mNick,mId,mPwd,instance;
 	function SingletonClass() {}
 	//setter
 	this.__defineSetter__("mName",function(val){this.mName=val;});

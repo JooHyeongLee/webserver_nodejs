@@ -1,6 +1,6 @@
-var FacebookStrategy = require('passport-facebook').Strategy;
-var passport = require('passport')
-var response = require('response')
+let FacebookStrategy = require('passport-facebook').Strategy;
+let passport = require('passport')
+let response = require('response')
 function fbLogin() {
 	passport.use(new FacebookStrategy({
 		clientID: '324057221510581',

@@ -1,9 +1,9 @@
-var express = require('express')
-var router = express.Router()
-var app = express();
-var path = require('path')
-var passport = require('passport')
-var fbLogin = require('../function/fbLogin')
+let express = require('express')
+let router = express.Router()
+let app = express();
+let path = require('path')
+let passport = require('passport')
+let fbLogin = require('../function/fbLogin')
 app.set('views',path.join(__dirname+'/views'));
 app.set('view engine','pug')
 app.use(passport.initialize());

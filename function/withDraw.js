@@ -1,5 +1,5 @@
-var models = require('../models')
-var member = require('./singleton')
+let models = require('../models')
+let member = require('./singleton')
 function withDrawFunction(idx,res) {
 	models.User.destroy({
 		where:{

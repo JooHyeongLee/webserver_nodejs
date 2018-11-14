@@ -1,35 +1,34 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var session = require('express-session')
-var passport = require('passport')
-var sequelize = require('sequelize')
-var bodyParser = require('body-parser');
-var models = require('./models')
-var app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session')
+const passport = require('passport')
+const sequelize = require('sequelize')
+const models = require('./models')
+const app = express();
 
 //app.get
-var indexRouter = require('./routes/index');
-var headerRouter = require('./routes/header');
-var aboutRouter = require('./routes/about');
-var practiceRouter = require('./routes/practice');
-var mypageRouter = require('./routes/mypage');
-var loginRouter = require('./routes/login');
-var enrollRouter = require('./routes/enroll');
-var commuityRouter = require('./routes/commuity')
-var commuityIdRouter = require('./routes/commuity_id')
-var logoutRouter = require('./routes/logout');
-var writeRouter = require('./routes/write');
-var facebookRouter = require('./routes/facebook');
-var facebookCallbackRouter = require('./routes/facebook_callback');
-var facebookSuccessRouter = require('./routes/login_success')
+const indexRouter = require('./routes/index');
+const headerRouter = require('./routes/header');
+const aboutRouter = require('./routes/about');
+const practiceRouter = require('./routes/practice');
+const mypageRouter = require('./routes/mypage');
+const loginRouter = require('./routes/login');
+const enrollRouter = require('./routes/enroll');
+const commuityRouter = require('./routes/commuity')
+const commuityIdRouter = require('./routes/commuity_id')
+const logoutRouter = require('./routes/logout');
+const writeRouter = require('./routes/write');
+const facebookRouter = require('./routes/facebook');
+const facebookCallbackRouter = require('./routes/facebook_callback');
+const facebookSuccessRouter = require('./routes/login_success')
 //app.post
-var loginReceiveRouter = require('./routes/login_receive');
-var writeReceiveRouter = require('./routes/write_receive');
-var enrollReceiveRouter = require('./routes/enroll_receive');
-var commuityReceiveRouter = require('./routes/commuity_search');
+const loginReceiveRouter = require('./routes/login_receive');
+const writeReceiveRouter = require('./routes/write_receive');
+const enrollReceiveRouter = require('./routes/enroll_receive');
+const commuityReceiveRouter = require('./routes/commuity_search');
 //sequelize
 models.sequelize.sync()
 	.then(function() {

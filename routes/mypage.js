@@ -1,9 +1,9 @@
-var express = require('express')
-var router = express.Router()
-var app = express();
-var path = require('path')
-var session = require('express-session')
-var models = require('../models')
+let express = require('express')
+let router = express.Router()
+let app = express();
+let path = require('path')
+let session = require('express-session')
+let models = require('../models')
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug')
 app.use(session({

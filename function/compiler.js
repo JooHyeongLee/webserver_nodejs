@@ -1,14 +1,14 @@
-var fs = require('fs');
-var spawn = require('child_process').spawn;
-var cp = require('child_process');
-var exec = require('child_process').exec;
-var models = require('../models');
-var async = require('async');
-var member = require('./singleton');
+let fs = require('fs');
+let spawn = require('child_process').spawn;
+let cp = require('child_process');
+let exec = require('child_process').exec;
+let models = require('../models');
+let async = require('async');
+let member = require('./singleton');
 function compileFunction(lan,path,source,res){
-	var file, compile,run,responseData;
-	var final = false;
-	var tasks = [
+	let file, compile,run,responseData;
+	let final = false;
+	let tasks = [
 		function(callback){
 			if(lan=='c')
 				file = path+'test.c';
@@ -23,7 +23,7 @@ function compileFunction(lan,path,source,res){
 			if(lan=='c'){
 				compile = exec('gcc test.c',{cwd:'sources'},function(err,stdout,stderr){
 					if(stderr.length==0){
-						var run = spawn('./sources/./a.out',[]);
+						let run = spawn('./sources/./a.out',[]);
 						run.stdout.on('data',function(stdout){
 							callback(null,stdout.toString('utf8'));
 						})
@@ -35,7 +35,7 @@ function compileFunction(lan,path,source,res){
 			else if(lan=='java'){
 				compile = exec('javac Test.java',{cwd:'sources'},function(err,stdout,stderr){
 					if(stderr.length==0) {
-						var run = exec("java Test",{cwd:'sources'},function(err,stdout,stderr){
+						let run = exec("java Test",{cwd:'sources'},function(err,stdout,stderr){
 							callback(null,stdout);
 						});
 					}

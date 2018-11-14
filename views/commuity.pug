@@ -20,9 +20,7 @@ body(onload='myFunction()' style='margin:0;')
 		tbody#tbody
 	.center
 		.pagination
-			//a(href='#') &laquo;
 			#tpage
-			//a(href='#') &raquo;
 	p(align="right")
 		button#write(type="button" class='btn btn-primary' onclick='writeFunction()') 글쓰기
 	div(align="right" style="margin-right:10%;")
@@ -53,8 +51,13 @@ body(onload='myFunction()' style='margin:0;')
 					+"<th>"+data[i].name+"</th>"
 					document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
 				}
-				for(var i=0;i<pagination;i++)
+				for(var i=0;i<pagination;i++){
+					if(i==0) 
+						document.getElementById("tpage").innerHTML += "<a href=commuity?page="+1+"> &laquo";
 					document.getElementById("tpage").innerHTML+="<a id=page"+i+" href=commuity?page="+(i+1)+">" +(i+1)
+					if(i==pagination-1)
+						document.getElementById("tpage").innerHTML += "<a href=commuity?page="+pagination+"> &raquo";
+				}
 			}
 		});
 		function myFunction() {

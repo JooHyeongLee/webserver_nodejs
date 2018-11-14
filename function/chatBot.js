@@ -1,17 +1,17 @@
-var client = require('cheerio-httpcli');
-var language = require('@google-cloud/language');
+let client = require('cheerio-httpcli');
+let language = require('@google-cloud/language');
 function chatBotFunction(chat,res){
-	var responseData;
+	let responseData;
 		if(chat.match(/검색/)){
-		var i = chat.indexOf("검색",0);
-		var word = chat.substring(0,i);
+		let i = chat.indexOf("검색",0);
+		let word = chat.substring(0,i);
 			if(word.length<1){
 				responseData = {'result':'no','answer':'형식에 맞지 않는 검색단어'};
 				res.json(responseData);
 				return;
 			}
 			else{
-				var aList;	
+				let aList;	
 				client.fetch('http://www.google.com/search',{q:word},function(err,$,response,body){
 				aList = $("div.rc").find(".r").find("a");
 				responseData = {'result' : 'search', 'answer':aList[0].attribs.href};

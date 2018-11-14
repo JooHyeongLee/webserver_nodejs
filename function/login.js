@@ -1,9 +1,9 @@
-var models = require('../models');
-var member = require('./singleton');
-var sha256 = require('sha256');
+let models = require('../models');
+let member = require('./singleton');
+let sha256 = require('sha256');
 
 function loginFunction(id,pwd,res,req){
-	var responseData;
+	let responseData;
 	models.User.findOne({
 		where: {user_id: id}
 	})

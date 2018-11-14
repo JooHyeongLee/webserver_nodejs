@@ -19,12 +19,16 @@ style(type='text/css').
 		height:60px; 
 	}
 script.
+	const images = !{data}
+	setInterval(function(){
+		$('.jumbotron').css({'background-image' : 'url('+images[Math.floor(Math.random()*3)+0]+')'})
+	},2000)
 	$(document).ready(function(){
 		$('#navbar').load('http://localhost:3000/header')
 	});
 #navbar
 .container
-	.jumbotron
+	.jumbotron#jumbo
 		h1.text-center(style="color:white;") 안녕하세요 
 		p.text-center
 			a.btn.btn-primary.btn-lg(href='practice', role='button') Let's go
