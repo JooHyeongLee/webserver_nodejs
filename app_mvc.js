@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -29,6 +30,8 @@ const loginReceiveRouter = require('./routes/login_receive');
 const writeReceiveRouter = require('./routes/write_receive');
 const enrollReceiveRouter = require('./routes/enroll_receive');
 const commuityReceiveRouter = require('./routes/commuity_search');
+const practiceReceiveRouter = require('./routes/practice_receive');
+const practiceChatRouter = require('./routes/practice_chat');
 //sequelize
 models.sequelize.sync()
 	.then(function() {
@@ -58,7 +61,8 @@ app.use(session({
 app.use(express.static(__dirname));
 app.use(passport.initialize());
 app.use(passport.session());
-
+//CORS 설정
+app.use(cors());
 //get
 app.use('/', indexRouter);
 app.use('/header',headerRouter);
@@ -80,6 +84,8 @@ app.use('/login_receive',loginReceiveRouter);
 app.use('/write_receive',writeReceiveRouter);
 app.use('/enroll_receive',enrollReceiveRouter);
 app.use('/commuity_receive',commuityReceiveRouter);
+app.use('/practice_receive',practiceReceiveRouter);
+app.use('/practice_chatting',practiceChatRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

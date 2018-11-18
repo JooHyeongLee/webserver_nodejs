@@ -73,13 +73,13 @@ script(src='//code.jquery.com/jquery-1.11.1.min.js')
 			xhr.setRequestHeader('Content-type','application/json');
 			xhr.send(info);
 		
-		xhr.addEventListener('load',function() {
+			xhr.addEventListener('load',function() {
 			var result = JSON.parse(xhr.responseText);
 			if(result.result != 'ok'){
 				alert('정보가 일치하지 않습니다.')
 				return;
 			} else {
-				location.replace("http://localhost:3000/")
+				window.location.href = "/";
 			}
 			});
 		}
