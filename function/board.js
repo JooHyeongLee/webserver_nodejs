@@ -1,10 +1,9 @@
 let models = require('../models');
-let member = require('./singleton');
 let async = require('async');
 
-function boardLoadFunction(callback) {
-	models.Board.findAll().then(function(result){	//result가 board 테이블의 모든 값을 json으로 반환
-		let jsonObj = [];				//board 테이블의 데이터를 담을 배열
+function boardLoadFunction(req,callback) {
+	models.Board.findAll().then((result)=>{		//result가 board 테이블의 모든 값을 json으로 반환
+		let jsonObj = [];						//board 테이블의 데이터를 담을 배열
 		let tasks = [
 			function(call){			
 				if(result.length==0)	//게시판에 글이 하나도 없을 때0값 리턴
@@ -16,29 +15,21 @@ function boardLoadFunction(callback) {
 				}
 			},
 			function(jsonObj,call){
-				let i =0;							
-				let nameList = {};							//{ 외래키 : 이름 } 의 형태로 만들 json 데이터
-				jsonObj.forEach(function(element){			//board 테이블과 user테이블의 데이터를 비교
-					models.User.findOne({					
-						where:{id:element.fk_userId}		//board의 외래키와 user의 id값의 일치여부
-					}).then(function(user){
-						nameList[element.fk_userId] = user.dataValues.name	
-						//nameList 객체에 { 외래키 : 이름 } 으로 저장
-						i++;
-						if(jsonObj.length==i)	//배열 끝까지 비교가 끝나면 다음 함수로 넘겨줌
-							call(null,nameList);		
+				let nameList = {};						//{ 외래키 : 이름 } 의 형태로 만들 json 데이터
+				//데이터 개수만큼 select문이 반복되는걸 해결할 수 있을까
+				jsonObj.forEach((element,index)=>{		//board 테이블과 user테이블의 데이터를 비교
+					models.User.findOne({
+						where:{id:element.fk_userId}	//board의 외래키와 user의 id값의 일치여부
+					}).then((user)=>{
+						nameList[element.fk_userId] = user.dataValues.name	//nameList 객체에 { 외래키 : 이름 } 으로 저장
+						if(jsonObj.length==index+1){		//nameList 저장이 끝났으면
+							jsonObj.every((element,i)=>{	
+								jsonObj[i].name = nameList[element.fk_userId]	//jsonObj 객체 배열에 매칭
+								return i<jsonObj.length
+							})
+							callback(jsonObj)
+						}
 					})
-				})
-			},
-			function(nameList,call) {			//jsonObj에 name값을 추가한 데이터를 최종적으로 만듦
-				let i=0
-				jsonObj.forEach(function(element){	
-					if(nameList.hasOwnProperty(element.fk_userId)){
-						jsonObj[i].name = nameList[element.fk_userId]	//jsonObj객체에 name key와 key value 추가
-						i++
-					}
-					if(i==jsonObj.length)
-						callback(jsonObj)		//배열 끝까지 비교가 끝나면 app.js로 넘겨줌
 				})
 			}
 		]
@@ -91,14 +82,15 @@ function boardSearchFunction(opt,word,callback) {
 		callback(res)
 }
 
-function boardWriteFunction(subject,content,fk_userId,callback){
+const boardWriteFunction = (...args)=>{
+	//subject, content, fk_userId, callback
 	let responseData = {'result':'ok'}
 	models.Board.create({
-		subject:subject,
-		content:content,
-		fk_userId: fk_userId,
+		subject:args[0],
+		content:args[1],
+		fk_userId: args[2],
 	}).then(function(result){
-		callback(responseData)
+		args[3](responseData)
 	}).catch(function(err){
 		console.log(err)
 	})

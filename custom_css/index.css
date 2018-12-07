@@ -1,0 +1,31 @@
+body{
+	background-color:white;
+}
+@keyframes fadeIn{
+	from{
+		opacity:0
+	}
+	to{
+		opacity:1;
+	}
+}
+.bgImage{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	z-index:-1;
+	animation:fadeIn 0.5s linear;
+}
+.jumbotron {
+	text-shadow : black 0.2em 0.2em 0.2em;
+}
+#footer{
+	background-color: #000000;
+	color:#ffffff;
+	position:fixed;
+	bottom:0;
+	width:100%;
+	height:60px; 
+}

@@ -3,18 +3,17 @@ let router = express.Router()
 let app = express();
 let path = require('path')
 let passport = require('passport')
-let session = require('express-session')
 let models = require('../models')
 let fbLogined = require('../function/fbLoginSuccess')
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug')
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({
-	secret:'123123123',
-	resave:false,
-	saveUninitialize:true
-}));
+//app.use(session({
+//	secret:'123123123',
+//	resave:false,
+//	saveUninitialize:true
+//}));
 function ensureAuthenticated(req, res, next) {
     // 로그인이 되어 있으면, 다음 파이프라인으로 진행
     if (req.isAuthenticated()) { return next(); }
@@ -30,10 +29,14 @@ router.get('/',ensureAuthenticated,function(req,res){
 	}).then(function(info){
 		req.session.idx = info.dataValues.id
 		req.session.save(function(){
-			res.redirect('/');
+			res.send(`
+				<script>
+				localStorage.login = true
+				window.location.href ='/'
+				</script>`)
+			//res.redirect('/');
 		});
 	})
-	console.log('성공시 세션값',req.session)
 })
 
 module.exports = router;

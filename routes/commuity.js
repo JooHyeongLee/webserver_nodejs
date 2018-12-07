@@ -6,7 +6,7 @@ let board = require('../function/board')
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','pug')
 router.get('/',function(req,res){
-	board.boardLoadFunction(function(result){
+	board.boardLoadFunction(req,function(result){
 		let jsonStr = JSON.stringify(result)
 		let page = req.query.page
 		//게시물이 하나도 없을 때

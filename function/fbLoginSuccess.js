@@ -4,16 +4,16 @@ function fbLoginSuccess(req) {
 	models.User.findOne({
 		where:{user_id:'fb'+req.session.passport.user.id}
 	}).then(function(info){
-	
-	}).catch(function(err){
 		models.User.create({
 			name: req.session.passport.user.displayName,
 			nick: req.session.passport.user.displayName,
 			user_id: 'fb'+req.session.passport.user.id,
 			password:sha256(req.session.passport.user.id)
-		}).catch(function(error){
-			console.log(error)
+		}).catch(function(err){
+			console.log('이미 존재함')
 		})
+	}).catch(function(err){
+		console.log(error)
 	})
 
 }

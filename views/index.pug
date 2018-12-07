@@ -4,32 +4,16 @@ head
 	meta(name='viewport', content='width = device-width', initial-scale='1')
 	title CodingTogether
 	link(rel='stylesheet', href='css/bootstrap.css')
+	link(rel='stylesheet', href='custom_css/index.css')
 	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
-style(type='text/css').
-	.jumbotron {
-		background-image : url('images/nodejs.png');
-		text-shadow : black 0.2em 0.2em 0.2em;
-	}
-	.diaporama { position:relative; height:400px; width:200px; }
-	.diaporama img { position:absolute; height:300px; width:300px;  }
-	#footer{
-		background-color: #000000;
-		color:#ffffff;
-		position:fixed;
-		bottom:0;
-		width:100%;
-		height:60px; 
-	}
+body
 #navbar
 .container
-	.jumbotron
-		
+	.jumbotron(style='background:transparent;')
 		.clock
 			h1.text-center(style="color:white;") 
 		p.text-center
 			a.btn.btn-primary.btn-lg(href='practice', role='button') Let's go
-	.diaporama
-		img(src="http://localhost:3000/images/nodejs.png" alt="...")
 .row
 #footer
 	.container
@@ -38,20 +22,24 @@ style(type='text/css').
 				h4 Copyright &copy; 2018 bubobubo 
 				h5 이주형 
 script.
-	const images = !{data}
+	const imgNum = !{imgNum}	//이미지 개수
+	const body = document.querySelector("body")
+	let currImg=1
 	const clockContainer = document.querySelector(".clock"),
 	clock = clockContainer.querySelector('h1')
-	let index = 0;
-	
 	$(document).ready(function(){
 		$('#navbar').load('http://localhost:3000/header')
 	});
-	function setImages() {
-		const img = document.querySelector(".diaporama")
-		for(let i=0;i<images.length;i++) {
-			let sample ='http://localhost:3000/'+`${images[i]}`
-			img.innerHTML += "<img src="+sample+">"
-		}
+	function paintImage() {
+		const file = genNum();
+		const image = new Image();
+		image.src = "../images/"+file+".jpg"
+		image.classList.add('bgImage')
+		body.appendChild(image)
+	}
+	function genNum() {
+		currImg >= imgNum-2 ? currImg=1 : currImg++;
+		return currImg 
 	}
 	function getTime(){
 		const date = new Date();
@@ -60,14 +48,33 @@ script.
 		const seconds = date.getSeconds();
 		clock.innerHTML = (hours<10 ? "0"+hours : hours)+':'+(minutes<10 ? "0"+minutes : minutes)+':'+(seconds<10 ? "0"+seconds : seconds)
 	}
-	function imageSlide() {
-		$('.diaporama img:gt(0)').hide();
-		setInterval(function(){$('.diaporama :first-child').fadeOut(1500).next('img').fadeIn(1500).end().appendTo('.diaporama');}, 2000);
+	function handleGeoSuccess(position){
+		const latitude = position.coords.latitude;
+		const longitude = position.coords.longitude;
+		const coordsObj = {
+			latitude,
+			longitude
+		};
+		localStorage.setItem('coords',JSON.stringify(coordsObj));
+	}
+	function handleGeoError() {
+		console.log('error')
+	}
+	function askForCoords(){
+		navigator.geolocation.getCurrentPosition(handleGeoSuccess,handleGeoError)
+	}
+	function loadCoords(){
+		const loadCoords = localStorage.getItem('coords');
+		if(loadCoords===null)
+			askForCoords();
+		else
+			console.log(loadCoords);
 	}
 	function init() {
 		getTime();
 		setInterval(getTime,1000)
-		setImages()
-		imageSlide()
+		paintImage();
+		setInterval(paintImage,1000)
+		loadCoords();
 	}
 	init();

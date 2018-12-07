@@ -9,7 +9,6 @@ const passport = require('passport')
 const sequelize = require('sequelize')
 const models = require('./models')
 const app = express();
-
 //app.get
 const indexRouter = require('./routes/index');
 const headerRouter = require('./routes/header');
@@ -25,6 +24,9 @@ const writeRouter = require('./routes/write');
 const facebookRouter = require('./routes/facebook');
 const facebookCallbackRouter = require('./routes/facebook_callback');
 const facebookSuccessRouter = require('./routes/login_success')
+
+const ioTestRouter = require('./routes/io')
+
 //app.post
 const loginReceiveRouter = require('./routes/login_receive');
 const writeReceiveRouter = require('./routes/write_receive');
@@ -79,6 +81,8 @@ app.use('/auth/facebook',facebookRouter);
 app.use('/auth/facebook/callback',facebookCallbackRouter);
 app.use('/login_success',facebookSuccessRouter);
 
+app.use('/io',ioTestRouter);
+
 //post
 app.use('/login_receive',loginReceiveRouter);
 app.use('/write_receive',writeReceiveRouter);
@@ -86,6 +90,7 @@ app.use('/enroll_receive',enrollReceiveRouter);
 app.use('/commuity_receive',commuityReceiveRouter);
 app.use('/practice_receive',practiceReceiveRouter);
 app.use('/practice_chatting',practiceChatRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
