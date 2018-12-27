@@ -9,6 +9,7 @@ const passport = require('passport')
 const sequelize = require('sequelize')
 const models = require('./models')
 const app = express();
+
 //app.get
 const indexRouter = require('./routes/index');
 const headerRouter = require('./routes/header');
@@ -23,9 +24,8 @@ const logoutRouter = require('./routes/logout');
 const writeRouter = require('./routes/write');
 const facebookRouter = require('./routes/facebook');
 const facebookCallbackRouter = require('./routes/facebook_callback');
-const facebookSuccessRouter = require('./routes/login_success')
-
-const ioTestRouter = require('./routes/io')
+const facebookSuccessRouter = require('./routes/login_success');
+const chattingRouter = require('./routes/chatting');
 
 //app.post
 const loginReceiveRouter = require('./routes/login_receive');
@@ -80,8 +80,7 @@ app.use('/write',writeRouter);
 app.use('/auth/facebook',facebookRouter);
 app.use('/auth/facebook/callback',facebookCallbackRouter);
 app.use('/login_success',facebookSuccessRouter);
-
-app.use('/io',ioTestRouter);
+app.use('/chatting',chattingRouter);
 
 //post
 app.use('/login_receive',loginReceiveRouter);

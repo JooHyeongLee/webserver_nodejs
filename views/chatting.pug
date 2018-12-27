@@ -1,0 +1,49 @@
+html
+head
+	meta(charset-='UTF-8')
+	meta(name='viewport', content='width = device-width', initial-scale='1')
+	title Chatting
+	link(rel='stylesheet', href='css/bootstrap.css')
+	link(rel='stylesheet', href='custom_css/index.css')
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+body
+#navbar
+.container
+	.row
+		div#photo(class='col-sm-2 text-center') 
+			img#profile(class='img-circle' height="65" width="65" alt='Avatar')
+		div(class='col-sm-10')
+			h4#user
+			small#date
+			p#content Keep up the GREAT work! I am cheering for you!! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+			br
+		div#chatLogs(class='col-sm-10')
+form
+	.form-group(style="position:fixed; width:100%; bottom:0;")
+		label(for='msgForm') Message
+		input#msgForm(type='text' class='form-control')
+
+script(type="text/javascript" src="js/bootstrap.js")
+script(src="/socket.io/socket.io.js")
+
+script.
+	$(document).ready(function(){
+		$('#navbar').load('http://localhost:3000/header')
+	});
+	let d = new Date().toISOString().slice(0,10);
+	let socket = io();
+	$("#user").html('JooHyeong')
+	$("#date").html(d)
+	$("#profile").attr("src","images/1.jpg")
+	
+	$("form").submit((e)=>{
+		e.preventDefault();
+		let msg = $("#msgForm");
+		socket.emit("test",msg.val());
+		msg.val("");
+	})
+	socket.on('receive',function(data){
+		$("#chatLogs").append(`<div>${data}</div>`)
+	})
+	
+

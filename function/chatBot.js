@@ -1,5 +1,6 @@
 let client = require('cheerio-httpcli');
 let language = require('@google-cloud/language');
+
 function chatBotFunction(chat,res){
 	let responseData;
 		if(chat.match(/검색/)){
@@ -40,5 +41,4 @@ function chatBotFunction(chat,res){
 	if(chat.match(/검색/)==null)
 		res.json(responseData);
 }
-
 exports.chatBotFunction = chatBotFunction;
