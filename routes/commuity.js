@@ -10,18 +10,19 @@ router.get('/',function(req,res){
 		let jsonStr = JSON.stringify(result)
 		let page = req.query.page
 		//게시물이 하나도 없을 때
-		if(result.length==0)		
-			res.render('commuity',{data:0, page:1})
+		if(result.length===0)		
+			res.render('commuity',{data:0, page:1, login:req.session.login})
 		//게시물이 10개 이하일 때
-		else if(result.length <=10)
-			res.render('commuity',{data:jsonStr, page:1})
+		else if(result.length <=10){
+			res.render('commuity',{data:jsonStr, page:1, login: req.session.login})
+		}
 		//게시물이 10개 이상일 때
 		else {
-			if(page==1){
+			if(page===1){
 				let list = []
 				for(let i=0;i<10;i++)
 					list[i] = result[i]
-				res.render('commuity',{data:JSON.stringify(list), page:parseInt( Math.ceil(result.length/10) )})
+				res.render('commuity',{data:JSON.stringify(list), page:parseInt( Math.ceil(result.length/10) ), login:req.session.login})
 			}
 			else{
 				let list = []
@@ -40,7 +41,7 @@ router.get('/',function(req,res){
 						idx++
 					}
 				}
-				res.render('commuity',{data:JSON.stringify(list), page:parseInt( Math.ceil(result.length/10) )})
+				res.render('commuity',{data:JSON.stringify(list), page:parseInt( Math.ceil(result.length/10) ),login:req.session.login})
 			}
 		}
 	})

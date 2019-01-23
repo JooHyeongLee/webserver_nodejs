@@ -8,7 +8,7 @@ function loginFunction(id,pwd,res,req){
 		where: {user_id: id}
 	})
 	.then(function(user){
-		if(user==null || user.dataValues.password!=pwd){
+		if(user===null || user.dataValues.password!==pwd){
 			responseData = {'result':'no','flag':req.session.login};
 			res.json(responseData);
 			console.log('로그인 실패');
@@ -20,7 +20,10 @@ function loginFunction(id,pwd,res,req){
 			res.json(responseData);
 			console.log('로그인 성공');
 		}
-	});
+	})
+		.catch(function(err){
+			console.log('오류발생!!')
+		})
 }
 
 exports.loginFunction = loginFunction;

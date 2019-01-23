@@ -3,10 +3,11 @@ let async = require('async');
 
 function boardLoadFunction(req,callback) {
 	models.Board.findAll().then((result)=>{		//result가 board 테이블의 모든 값을 json으로 반환
+		let obj = new Map();
 		let jsonObj = [];						//board 테이블의 데이터를 담을 배열
 		let tasks = [
 			function(call){			
-				if(result.length==0)	//게시판에 글이 하나도 없을 때0값 리턴
+				if(result.length===0)	//게시판에 글이 하나도 없을 때0값 리턴
 					callback(0)
 				else{
 					for(let i=0;i<result.length;i++)		//데이터의 개수만큼 반복문
@@ -22,7 +23,7 @@ function boardLoadFunction(req,callback) {
 						where:{id:element.fk_userId}	//board의 외래키와 user의 id값의 일치여부
 					}).then((user)=>{
 						nameList[element.fk_userId] = user.dataValues.name	//nameList 객체에 { 외래키 : 이름 } 으로 저장
-						if(jsonObj.length==index+1){		//nameList 저장이 끝났으면
+						if(jsonObj.length===index+1){		//nameList 저장이 끝났으면
 							jsonObj.every((element,i)=>{	
 								jsonObj[i].name = nameList[element.fk_userId]	//jsonObj 객체 배열에 매칭
 								return i<jsonObj.length
@@ -43,7 +44,7 @@ function boardLoadFunction(req,callback) {
 }
 function boardSearchFunction(opt,word,callback) {
 	let res = {'res':'null'}
-	if(opt.opt=='작성자'){
+	if(opt.opt==='작성자'){
 		models.User.findAll({
 			where:{name:word.word}
 		}).then(function(user){
@@ -56,13 +57,13 @@ function boardSearchFunction(opt,word,callback) {
 			callback(res)
 		})
 	}
-	else if(opt.opt=='제목'){
+	else if(opt.opt==='제목'){
 		let i = 0
 		let names=[]
 		models.Board.findAll({
 			where: {subject:word.word}
 		}).then(function(board){
-			if(board.length==0)
+			if(board.length===0)
 				callback(res)
 			board.forEach(function(element){
 				models.User.findAll({
@@ -70,7 +71,7 @@ function boardSearchFunction(opt,word,callback) {
 				}).then(function(user){
 					names[i] = {'name':user[0].dataValues.name}
 					i++
-					if(board.length==i)
+					if(board.length===i)
 						callback(board,names)
 				})
 			})

@@ -7,6 +7,7 @@ head
 	link(rel='stylesheet', href='custom_css/index.css')
 	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
 body
+	//script(src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlreNY42qO7GiCXdwTSNsedHgw5kU9R4k&callback=initMap" async defer)
 #navbar
 .container
 	.jumbotron(style='background:transparent;')
@@ -14,6 +15,7 @@ body
 			h1.text-center(style="color:white;") 
 		p.text-center
 			a.btn.btn-primary.btn-lg(href='practice', role='button') Let's go
+			div(id="map")
 .row
 #footer
 	.container
@@ -24,7 +26,8 @@ body
 script.
 	const imgNum = !{imgNum}	//이미지 개수
 	const body = document.querySelector("body")
-	let currImg=1
+	let currImg=1;
+	const image = new Image();
 	const clockContainer = document.querySelector(".clock"),
 	clock = clockContainer.querySelector('h1')
 	$(document).ready(function(){
@@ -32,7 +35,6 @@ script.
 	});
 	function paintImage() {
 		const file = genNum();
-		const image = new Image();
 		image.src = "images/"+file+".jpg"
 		image.classList.add('bgImage')
 		body.appendChild(image)
@@ -67,9 +69,18 @@ script.
 		const loadCoords = localStorage.getItem('coords');
 		if(loadCoords===null)
 			askForCoords();
-		else
-			console.log(loadCoords);
+		else{
+				
+		}
 	}
+	/*
+	function initMap(){
+		map = new google.maps.Map(document.getElementById('map'), {
+			center: {lat: -34.397, lng: 150.644},
+			zoom: 8
+		});
+	}
+	*/
 	function init() {
 		getTime();
 		setInterval(getTime,1000)

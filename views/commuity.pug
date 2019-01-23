@@ -5,7 +5,7 @@ link(rel='stylesheet', href='css/bootstrap.css')
 link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css')
 link(href='custom_css/spinner.css', rel='stylesheet')
 link(href='custom_css/pagination.css' rel='stylesheet')
-body(onload='myFunction()' style='margin:0;')
+//body(onload='pageLoad()' style='margin:0;')
 #loader(style='visibility:visible;')
 #page(style='visibility:hidden;')
 	#navbar
@@ -32,59 +32,70 @@ body(onload='myFunction()' style='margin:0;')
 			input#searchWord(type='search' class='search-input' ng=model='searchText' placeholder='Search')
 			button#search(type='button' onclick='searchFunction()') 검색 
 	script.
-		var data = !{data}
-		var pagination =!{page} 
-		var len = Object.keys(data).length
-		$(document).ready(function(){
-			var tbody = document.getElementById('tbody');
+		let data = !{data}
+		let pagination =!{page} 
+		let login = !{login}
+		let tbody = document.getElementById('tbody');
+		init();
+		$(window).load(function(){
 			$('#navbar').load('http://localhost:3000/header')
+			setTimeout(showPage,1000);
+		});
+
+		function init(){
+			let len = Object.keys(data).length
 			if(data==0)
 				len = 1
 			else{
-				len = Object.keys(data).length
-				tbody = document.getElementById('tbody');
-				for(var i=0;i<len;i++){
-					tbody.innerHTML += "<th>"+(i+1)+"</th>"
-					+"<th><a id=link"+i+" href='' onclick='countViews(\" "+i+" \")'>"+data[i].subject+"</a></th>"
-					+"<th>"+data[i].count+"</th>"
-					+"<th>"+data[i].created_at.substr(0,10)+ "</th>"
-					+"<th>"+data[i].name+"</th>"
-					document.getElementById("link"+i).setAttribute('href','commuity/'+data[i].id)
+				for(let [i,v] of data.entries()){
+					tbody.innerHTML += `
+					<th>${i+1}</th>
+					<th><a id=link${i} href=''>${v.subject}</a></th>
+					<th>${v.count}</th>
+					<th>${v.created_at.substr(0,10)}</th>
+					<th>${v.name}</th>
+					`
+					document.getElementById(`link${i}`).setAttribute('href',`commuity/${v.id}`)
 				}
-				for(var i=0;i<pagination;i++){
-					if(i==0) 
+				for(let i=0;i<pagination;i++){
+					if(i===0){ 
 						document.getElementById("tpage").innerHTML += "<a href=commuity?page="+1+"> &laquo";
-					document.getElementById("tpage").innerHTML+="<a id=page"+i+" href=commuity?page="+(i+1)+">" +(i+1)
-					if(i==pagination-1)
+						document.getElementById("tpage").innerHTML+="<a id=page"+i+" href=commuity?page="+(i+1)+">" +(i+1)
+					}
+					if(i===pagination-1){
 						document.getElementById("tpage").innerHTML += "<a href=commuity?page="+pagination+"> &raquo";
+					}
 				}
 			}
-		});
-		function myFunction() {
-			loading = setTimeout(showPage, 700);
+
 		}
 		function showPage() {
 			document.getElementById("loader").style.visibility = "hidden";
 			document.getElementById('page').style.visibility = 'visible';
 		}
 		function writeFunction(){
-			location.replace('http://localhost:3000/write')
+			if(login === true){
+				location.replace('http://localhost:3000/write')
+			}
+			else{
+				alert('로그인이 필요합니다.')
+			}
 		}
 		function searchFunction(){
-			var opt = document.getElementById('option').value
-			var word = document.getElementById('searchWord').value
-			var data = {'opt':opt, 'word':word}
-			var xhr = new XMLHttpRequest();
+			let opt = document.getElementById('option').value
+			let word = document.getElementById('searchWord').value
+			let data = {'opt':opt, 'word':word}
+			let xhr = new XMLHttpRequest();
 			xhr.open('POST','http://localhost:3000/commuity_receive',true)
 			xhr.setRequestHeader('Content-type','application/json')
 			xhr.send(JSON.stringify(data))
 			xhr.addEventListener('load',function(){
 				tbody.innerHTML ='' 
-				var result = JSON.parse(xhr.responseText);
+				let result = JSON.parse(xhr.responseText);
 				if(result.result.res=='null')
 					tbody.innerHTML = '일치하는 결과가 없습니다.'	
 				else {
-					var i =0;
+					let i =0;
 					if(opt=='작성자'){
 						result.result.forEach(function(element){
 							tbody.innerHTML += "<th>"+(i+1)+"</th>"

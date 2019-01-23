@@ -4,12 +4,10 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const session = require('express-session')
-const passport = require('passport')
-const sequelize = require('sequelize')
-const models = require('./models')
+const session = require('express-session');
+const passport = require('passport');
+const models = require('./models');
 const app = express();
-
 //app.get
 const indexRouter = require('./routes/index');
 const headerRouter = require('./routes/header');
@@ -18,8 +16,8 @@ const practiceRouter = require('./routes/practice');
 const mypageRouter = require('./routes/mypage');
 const loginRouter = require('./routes/login');
 const enrollRouter = require('./routes/enroll');
-const commuityRouter = require('./routes/commuity')
-const commuityIdRouter = require('./routes/commuity_id')
+const commuityRouter = require('./routes/commuity');
+const commuityIdRouter = require('./routes/commuity_id');
 const logoutRouter = require('./routes/logout');
 const writeRouter = require('./routes/write');
 const facebookRouter = require('./routes/facebook');
@@ -37,14 +35,14 @@ const practiceChatRouter = require('./routes/practice_chat');
 //sequelize
 models.sequelize.sync()
 	.then(function() {
-	console.log('✓ DB connection success.');
-	  console.log('  Press CTRL-C to stop\n');
-  })
-  .catch(function(err) {
-    console.error(err);
-    console.log('✗ DB connection error. Please make sure DB is running.');
-    process.exit();
-  });
+		console.log('✓ DB connection success.');
+		console.log('  Press CTRL-C to stop\n');
+	})
+	.catch(function(err) {
+		console.error(err);
+		console.log('✗ DB connection error. Please make sure DB is running.');
+		process.exit();
+	});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,6 +61,11 @@ app.use(session({
 app.use(express.static(__dirname));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use((req,res,next)=>{
+	if(req.session.login===undefined)
+		req.session.login = false;
+	next();
+})
 //CORS 설정
 app.use(cors());
 //get

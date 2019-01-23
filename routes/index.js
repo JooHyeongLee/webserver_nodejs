@@ -4,7 +4,7 @@ let router = express.Router()
 let app = express();
 
 router.get('/',function(req,res){
-	if(req.session.login == undefined){
+	if(req.session.login === undefined){
 		req.session.login = false
 		req.session.idx = -1
 	}
